@@ -1,0 +1,108 @@
+{
+    "reference_year": 2022,
+    "current_year": 2026,
+    "annual_growth_rate": 0.035,
+    "base_price_m2": 3562.5,
+    "city_base_price_m2": {
+      "Almere": 3543.6893203883496,
+      "Amersfoort": 4031.425891181989,
+      "Amsterdam": 6914.0,
+      "Apeldoorn": 3428.794221456127,
+      "Arnhem": 3362.0689655172414,
+      "Den Haag": 4219.827586206897,
+      "Eindhoven": 3775.8798106606296,
+      "Enschede": 2818.42880825198,
+      "Haarlem": 5158.730158730159,
+      "Purmerend": 3669.7247706422017,
+      "Rotterdam": 3932.0,
+      "Zaandam": 4009.433962264151
+    },
+    "neighborhood_price_weight": 0.7,
+    "room_area_m2": 30.0,
+    "room_adjustment_per_room": 0.02,
+    "max_adjustment": 0.25,
+    "min_adjustment": -0.2,
+    "energy_label_adjustments": {
+      "A+": 0.06,
+      "A": 0.04,
+      "A1": 0.04,
+      "B": 0.015,
+      "C": 0.0,
+      "D": -0.01,
+      "E": -0.02,
+      "F": -0.035,
+      "G": -0.06,
+      "NIET VERPLICHT": 0.0
+    },
+    "build_type_adjustments": {
+      "Bestaande bouw": 0.0
+    },
+    "house_type_adjustments": {
+      "Corner": -0.02,
+      "Detached": 0.08,
+      "Semi-detached": 0.0,
+      "Terraced": -0.045
+    },
+    "garden_adjustments": {
+      "Around": 0.18,
+      "Back": -0.03,
+      "Multiple": 0.08,
+      "Other/Unknown": 0.0,
+      "Terrace/Patio": 0.0
+    },
+    "roof_adjustments": {
+      "Composite": 0.06,
+      "Flat": 0.02,
+      "Gable": -0.015,
+      "Hip": 0.02,
+      "Mansard": 0.06,
+      "Other/Unknown": 0.0,
+      "Shed": -0.01,
+      "Tent": 0.02
+    },
+    "position_adjustments": {
+      "Busy road": -0.05,
+      "Center": -0.03,
+      "Forest": 0.07,
+      "Other/Unknown": 0.0,
+      "Park": 0.01,
+      "Quiet/Sheltered": 0.045,
+      "Residential": -0.02,
+      "View/Open": 0.04,
+      "Water": 0.08
+    },
+    "toilet_adjustments": {
+      "1 bath, 0 toilet": -0.02,
+      "1 bath, 1 toilet": -0.025,
+      "1 bath, 2+ toilet": 0.055,
+      "2+ bath, 0 toilet": -0.08,
+      "2+ bath, 1 toilet": 0.085,
+      "2+ bath, 2+ toilet": 0.18
+    },
+    "floors_adjustments": {
+      "Unknown": 0.0,
+      "1": 0.22,
+      "2": 0.03,
+      "3": -0.015,
+      "4+": 0.07
+    },
+    "lot_size_ratio_median": 1.8220338983050848,
+    "lot_size_ratio_weight": 0.15,
+    "lot_size_ratio_clamp": 0.06,
+    "build_year_buckets": [],
+    "renovation_roi": 0.5,
+    "renovation_cap": 0.3,
+    "renovation_label_step_uplift": 0.03,
+    "renovation_label_cap": 0.2,
+    "renovation_roi_saturation": 0.1,
+    "renovation_category_weights": {
+      "kitchen": 0.7,
+      "bathroom": 0.8,
+      "insulation": 1.2,
+      "roof_windows": 1.1,
+      "exterior": 0.6,
+      "other": 1.0
+    },
+    "estimate_uncertainty_base": 0.08,
+    "estimate_uncertainty_per_adjustment": 0.4
+}

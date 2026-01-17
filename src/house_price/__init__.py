@@ -1,0 +1,1 @@
+"""House price calculator package."""
