@@ -240,6 +240,7 @@ position_display = {
     "Drukke weg": "Busy road",
     "Overig/onbekend": "Other/Unknown",
 }
+condition_options = ["Slecht", "Matig", "Redelijk", "Goed", "Uitstekend"]
 toilet_display = {
     "1 bad, 0 toilet": "1 bath, 0 toilet",
     "1 bad, 1 toilet": "1 bath, 1 toilet",
@@ -317,16 +318,22 @@ with col2:
         help="Gestandaardiseerde woningcategorie.",
     )
     house_type = house_type_display[house_type_label]
+    condition = st.selectbox(
+        "Staat van onderhoud",
+        options=condition_options,
+        index=condition_options.index("Goed"),
+        help="Algemene onderhoudsstaat nu; beïnvloedt de waarde direct.",
+    )
     garden = None
     toilet = None
     neighborhood_price_m2 = st.number_input(
         "Buurtprijs per m² (optioneel)",
         min_value=0.0,
         max_value=20000.0,
-        value=5863.0,
+        value=6300.0,
         step=50.0,
         format="%.0f",
-        help="Euro per m² woonoppervlak in de buurt.",
+        help="Gemiddelde buurtprijs per m² (liefst breed gemiddelde, niet alleen vergelijkbare woningen).",
     )
 
 with st.expander("Aanvullende woningkenmerken (optioneel)"):
@@ -338,41 +345,41 @@ with st.expander("Aanvullende woningkenmerken (optioneel)"):
         value=108.0,
         step=10.0,
         format="%.0f",
-        help="Totale perceelgrootte in m² (indien relevant).",
+        help="Totale perceelgrootte; laat 0 als dit onbekend is.",
     )
     if dataset_available:
         garden_label = st.selectbox(
             "Tuin",
             options=list(garden_display.keys()),
             index=list(garden_display.keys()).index("Voortuin"),
-            help="Eenvoudige tuincategorieën.",
+            help="Kies de meest passende tuinvorm; onbekend = Overig/onbekend.",
         )
         garden = garden_display[garden_label]
         toilet_label = st.selectbox(
             "Toilet/Badkamer",
             options=list(toilet_display.keys()),
             index=list(toilet_display.keys()).index("2+ bad, 2+ toilet"),
-            help="Eenvoudige toilet/badkamer-categorieën.",
+            help="Aantal badkamers + toiletten samen; onbekend = kies de dichtstbijzijnde.",
         )
         toilet = toilet_display[toilet_label]
         roof_label = st.selectbox(
             "Dak",
             options=list(roof_display.keys()),
-            help="Eenvoudige dakcategorieën.",
+            help="Dominant daktype; onbekend = Overig/onbekend.",
         )
         roof = roof_display[roof_label]
         position_label = st.selectbox(
             "Ligging",
             options=list(position_display.keys()),
             index=list(position_display.keys()).index("Rustig/beschut"),
-            help="Eenvoudige ligging-categorieën.",
+            help="Hoofdsituatie van de ligging; kies wat het best past.",
         )
         position = position_display[position_label]
         floors_label = st.selectbox(
             "Woonlagen",
             options=list(floors_display.keys()),
             index=list(floors_display.keys()).index("2"),
-            help="Eenvoudige woonlaag-categorieën.",
+            help="Aantal woonlagen in gebruik; onbekend = Onbekend.",
         )
         floors = floors_display[floors_label]
     else:
@@ -538,6 +545,7 @@ features = {
     "energy_label": energy_label,
     "build_type": build_type,
     "house_type": house_type,
+    "condition": condition,
     "garden": garden,
     "roof": roof,
     "position": position,

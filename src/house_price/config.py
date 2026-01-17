@@ -24,6 +24,7 @@ class MarketProfile:
     position_adjustments: Dict[str, float] = field(default_factory=dict)
     toilet_adjustments: Dict[str, float] = field(default_factory=dict)
     floors_adjustments: Dict[str, float] = field(default_factory=dict)
+    condition_adjustments: Dict[str, float] = field(default_factory=dict)
     lot_size_ratio_median: float = 0.0
     lot_size_ratio_weight: float = 0.15
     lot_size_ratio_clamp: float = 0.06

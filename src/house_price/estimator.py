@@ -81,6 +81,9 @@ class PriceEstimator:
             "floors": self.category_adjustment(
                 features.get("floors"), self.profile.floors_adjustments
             ),
+            "condition": self.category_adjustment(
+                features.get("condition"), self.profile.condition_adjustments
+            ),
             "build_year": self.build_year_adjustment(features),
             "rooms": self.room_adjustment(features),
             "lot_size": self.lot_size_adjustment(features),

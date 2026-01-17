@@ -96,6 +96,13 @@
       "3": -0.015,
       "4+": 0.07
     },
+    "condition_adjustments": {
+      "Slecht": -0.12,
+      "Matig": -0.06,
+      "Redelijk": 0.0,
+      "Goed": 0.10,
+      "Uitstekend": 0.18
+    },
     "lot_size_ratio_median": 1.8220338983050848,
     "lot_size_ratio_weight": 0.15,
     "lot_size_ratio_clamp": 0.06,
