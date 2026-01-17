@@ -47,7 +47,13 @@ class PriceEstimator:
             raise ValueError("living_area is required for estimation.")
 
         base_price_m2 = self.base_price_m2(features)
-        base_value = living_area * base_price_m2
+        full_area = max(0.0, self.profile.area_full_price_m2)
+        extra_weight = max(0.0, min(1.0, self.profile.area_extra_weight))
+        if living_area <= full_area:
+            effective_area = living_area
+        else:
+            effective_area = full_area + (living_area - full_area) * extra_weight
+        base_value = effective_area * base_price_m2
 
         adjustments = {
             "energy_label": self.category_adjustment(

@@ -28,6 +28,8 @@ class MarketProfile:
     lot_size_ratio_weight: float = 0.15
     lot_size_ratio_clamp: float = 0.06
     build_year_buckets: list = field(default_factory=list)
+    area_full_price_m2: float = 80.0
+    area_extra_weight: float = 0.7
     renovation_roi: float = 0.6
     renovation_cap: float = 0.2
     renovation_label_step_uplift: float = 0.02

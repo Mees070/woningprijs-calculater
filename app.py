@@ -73,6 +73,7 @@ with st.expander("Modelaannames en formule"):
     st.markdown(
         "- Basisprijs per m² is het uitgangsniveau van de markt; per stad als beschikbaar, anders algemeen.\n"
         "- Formule: prijs = woonoppervlak × basis_m2 × (1 + aanpassingen) × (1+g)^t.\n"
+        "- Extra m² boven een drempel tellen minder mee (aflopende meerwaarde).\n"
         "- Aanpassingen zijn procentueel; renovatie-opslag is begrensd.\n"
         "- Onzekerheid neemt toe bij grotere aanpassingen."
     )
