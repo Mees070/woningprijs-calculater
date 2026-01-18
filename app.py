@@ -310,6 +310,13 @@ with col2:
     )
     if city_choice == "Other...":
         city = st.text_input("Andere stad", value=city_default)
+        normalized_city = city.strip()
+        if normalized_city not in profile.city_base_price_m2:
+            st.info(
+                "Deze stad staat nog niet in de lijst. De basisprijs per m² wordt nu "
+                "het nationale basisniveau. Je kunt de stad toevoegen via de pagina "
+                "‘Aannames’ onder ‘Stadprijzen’."
+            )
     else:
         city = city_choice
     neighborhood_price_m2 = st.number_input(

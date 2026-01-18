@@ -442,6 +442,10 @@ with st.form("assumptions_form"):
     if saved:
         save_profile(profile, CONFIG_PATH)
         st.success("Aannames opgeslagen.")
+        st.info(
+            "Nieuwe steden verschijnen in de hoofdapp na herladen van de pagina "
+            "(of herstart van de app)."
+        )
 
     reset = st.form_submit_button("Reset naar defaults")
     if reset:

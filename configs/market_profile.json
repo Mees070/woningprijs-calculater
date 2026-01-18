@@ -25,7 +25,8 @@
     "Utrecht": 5907.0,
     "Vlaardingen": 3740.0,
     "Zaandam": 4438.0,
-    "Zoetermeer": 4053.0
+    "Zoetermeer": 4053.0,
+    "New York": 20000.0
   },
   "neighborhood_price_weight": 0.7,
   "room_area_m2": 30.0,
