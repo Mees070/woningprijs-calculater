@@ -84,6 +84,7 @@ Voor consistente suggesties staat er een korte richtlijn in
 ## Gebruikstips (kort)
 
 - **Buurtprijs per m²**: gebruik een breed buurtgemiddelde; geen “perfecte match”-prijs.
-- **Micro‑locatie**: alleen voor het extra straatje‑effect (bovenop tuin/ligging/type).
+- **Extra vraag (straat/segment)**: alleen voor het effect dat niet al in tuin/ligging/type zit.
+- **Tuinoppervlak**: <10 m² telt niet mee; effect verschilt voor appartement vs woonhuis.
 - **Onderhoudsstaat**: kies de huidige staat; renovatie kan de staat automatisch verbeteren.
 - **Renovatiebudget**: als de staat verbetert, telt budget niet dubbel mee.

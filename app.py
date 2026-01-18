@@ -90,7 +90,8 @@ with st.expander("Hoe werkt deze calculator?"):
         "- **Stap 1 — Huidige woning**: vul de woningkenmerken in zoals ze nu zijn.\n"
         "- **Stap 2 — Renovatie & toekomst**: geef je renovatiebudget, gewenste energielabel en kijktermijn.\n"
         "- **Resultaat**: je ziet de waarde zonder renovatie en na renovatie, inclusief bandbreedte.\n"
-        "- **Buurtprijs & micro-locatie**: buurtprijs is het brede gemiddelde; micro‑locatie is het extra straatje‑effect.\n"
+        "- **Buurtprijs & extra vraag**: buurtprijs is het brede gemiddelde; extra vraag is het straat/segment‑effect.\n"
+        "- **Tuinoppervlak**: <10 m² telt niet mee; effect verschilt voor appartement en woonhuis.\n"
         "- **Onderhoudsstaat**: beïnvloedt de waarde direct; renovatie kan de staat automatisch verbeteren."
     )
 st.markdown(
@@ -138,14 +139,14 @@ with st.sidebar:
         value=profile.annual_growth_rate,
         step=0.005,
         format="%.3f",
-        help="Fractie per jaar (bijv. 0,035 = 3,5%).",
+        help="Fractie per jaar, bijv. 0,035 = 3,5%.",
     )
     profile.base_price_m2 = st.number_input(
         "Basisprijs per m² (EUR)",
         value=profile.base_price_m2,
         step=50.0,
         format="%.0f",
-        help="Euro per m² woonoppervlak.",
+        help="Euro per m² woonoppervlak (basisniveau).",
     )
     profile.neighborhood_price_weight = st.slider(
         "Weging buurtprijs",
@@ -153,14 +154,14 @@ with st.sidebar:
         max_value=1.0,
         value=profile.neighborhood_price_weight,
         step=0.05,
-        help="Mate waarin de buurtprijs per m² het resultaat beïnvloedt.",
+        help="Hoeveel de buurtprijs meeweegt t.o.v. stadsbasis.",
     )
     with st.expander("Geavanceerde marktinstellingen"):
         profile.current_year = st.number_input(
             "Huidig jaar",
             value=profile.current_year,
             step=1,
-            help="Jaar (YYYY) voor de marktrichting.",
+            help="Jaar (YYYY) waarnaar je waarde wilt kijken.",
         )
         profile.reference_year = st.number_input(
             "Referentiejaar",
@@ -174,7 +175,7 @@ with st.sidebar:
             max_value=1.0,
             value=profile.renovation_roi,
             step=0.05,
-            help="Verhouding (0,55 = €0,55 waarde per €1).",
+            help="Waarde per €1 budget (ruwe inschatting).",
         )
         profile.renovation_roi_saturation = st.slider(
             "Verzadiging renovatie-ROI",
@@ -182,7 +183,7 @@ with st.sidebar:
             max_value=0.2,
             value=profile.renovation_roi_saturation,
             step=0.01,
-            help="Schaal als deel van woningwaarde (bijv. 0,10 = 10%).",
+            help="Demping bij grote budgetten, als deel van woningwaarde.",
         )
         profile.renovation_cap = st.slider(
             "Max. renovatie-opslag",
@@ -190,7 +191,7 @@ with st.sidebar:
             max_value=0.5,
             value=profile.renovation_cap,
             step=0.02,
-            help="Maximale procentuele opslag (bijv. 0,25 = 25%).",
+            help="Maximale totale renovatie-uplift (fractie).",
         )
         profile.renovation_label_step_uplift = st.slider(
             "Opstap energielabel",
@@ -216,7 +217,7 @@ with st.sidebar:
             max_value=0.2,
             value=profile.estimate_uncertainty_base,
             step=0.01,
-            help="Fractie voor bandbreedte (bijv. 0,08 = ±8%).",
+            help="Basisbandbreedte, bijv. 0,08 = ±8%.",
         )
         profile.estimate_uncertainty_per_adjustment = st.slider(
             "Onzekerheid per aanpassing",
@@ -224,7 +225,7 @@ with st.sidebar:
             max_value=1.0,
             value=profile.estimate_uncertainty_per_adjustment,
             step=0.05,
-            help="Extra bandbreedte per totale aanpassing (fractie).",
+            help="Extra bandbreedte per totale aanpassing.",
         )
 
 st.subheader("Huidige woning")
@@ -275,7 +276,7 @@ with col1:
         value=108.0,
         step=1.0,
         format="%.0f",
-        help="Bruikbaar woonoppervlak binnen.",
+        help="Bruikbaar woonoppervlak binnen (m²).",
     )
     rooms = st.number_input(
         "Kamers",
@@ -295,7 +296,7 @@ with col1:
         max_value=2035,
         value=1869,
         step=1,
-        help="Wordt gebruikt voor ouderdomsaanpassing.",
+        help="Bouwjaar; bepaalt ouderdomscorrectie.",
     )
     city_choice = st.selectbox(
         "Stad",
@@ -303,7 +304,7 @@ with col1:
         index=city_select_options.index(city_default)
         if city_default in city_select_options
         else 0,
-        help="Koppelt aan de stadsspecifieke basisprijs.",
+        help="Stad voor basisprijs per m².",
     )
     if city_choice == "Other...":
         city = st.text_input("Andere stad", value=city_default)
@@ -347,7 +348,7 @@ with col2:
         "Energielabel",
         options=energy_label_options,
         index=energy_label_options.index("E"),
-        help="A–G (of A+ varianten) volgens energielabel.",
+        help="A–G (of A+ varianten).",
     )
     energy_adj = profile.energy_label_adjustments.get(
         normalize_energy_label(energy_label), 0.0
@@ -365,7 +366,7 @@ with col2:
         "Woningtype",
         options=list(house_type_display.keys()),
         index=list(house_type_display.keys()).index("Tussenwoning"),
-        help="Gestandaardiseerde woningcategorie.",
+        help="Woningtype (categorie).",
     )
     house_type = house_type_display[house_type_label]
     house_adj = profile.house_type_adjustments.get(house_type, 0.0)
@@ -401,7 +402,7 @@ with st.expander("Aanvullende woningkenmerken (optioneel)"):
         value=108.0,
         step=10.0,
         format="%.0f",
-        help="Totale perceelgrootte; laat 0 als dit onbekend is.",
+        help="Totale perceelgrootte; laat 0 bij onbekend.",
     )
     garden_area = st.number_input(
         "Tuinoppervlak (m²)",
@@ -410,7 +411,7 @@ with st.expander("Aanvullende woningkenmerken (optioneel)"):
         value=54.0,
         step=1.0,
         format="%.0f",
-        help="Oppervlakte van de privé buitenruimte; <10 m² telt niet mee.",
+        help="Privé buitenruimte; <10 m² telt niet mee.",
     )
     garden_adj = hint_estimator.garden_adjustment(
         {"garden_area": garden_area, "house_type": house_type}
@@ -420,7 +421,7 @@ with st.expander("Aanvullende woningkenmerken (optioneel)"):
         "Badkamers",
         options=bathroom_options,
         index=bathroom_options.index("2"),
-        help="Aantal badkamers in de woning.",
+        help="Aantal badkamers.",
     )
     bathrooms = bathrooms_label
     bathroom_adj = profile.bathroom_adjustments.get(bathrooms, 0.0)
@@ -429,7 +430,7 @@ with st.expander("Aanvullende woningkenmerken (optioneel)"):
         "Toiletten",
         options=toilet_count_options,
         index=toilet_count_options.index("2"),
-        help="Aantal toiletten (incl. in badkamer).",
+        help="Aantal toiletten (incl. badkamer).",
     )
     toilets = toilets_label
     toilets_adj = profile.toilet_count_adjustments.get(toilets, 0.0)
@@ -439,7 +440,7 @@ with st.expander("Aanvullende woningkenmerken (optioneel)"):
             "Ligging",
             options=list(position_display.keys()),
             index=list(position_display.keys()).index("Rustig/beschut"),
-            help="Hoofdsituatie van de ligging; kies wat het best past.",
+            help="Hoofdsituatie van de ligging.",
         )
         position = position_display[position_label]
         position_adj = (
@@ -488,7 +489,7 @@ with col4:
         max_value=30,
         value=0,
         step=1,
-        help="Aantal jaren vooruit; deze periode wordt op alle waarden toegepast.",
+        help="Aantal jaren vooruit; geldt voor alle waarden.",
     )
     position = None
 
@@ -588,7 +589,7 @@ with st.expander("Woningaanpassingen (optioneel)"):
             max_value=10,
             value=1,
             step=1,
-            help="Meer kamers helpen alleen als het oppervlak dit ondersteunt.",
+            help="Helpt alleen als het oppervlak dit ondersteunt.",
         )
 
 features = {
