@@ -4,35 +4,32 @@
   "annual_growth_rate": 0.035,
   "base_price_m2": 3562.5,
   "city_base_price_m2": {
-    "Almere": 4158.0,
-    "Amersfoort": 4863.0,
-    "Amsterdam": 8155.0,
-    "Bussum": 5394.0,
-    "Delft": 4815.0,
-    "Den Haag": 4592.0,
-    "Haarlem": 5915.0,
-    "Hilversum": 5051.0,
-    "Hoofddorp": 4963.0,
-    "Huizen": 4925.0,
-    "IJsselstein": 4433.0,
-    "Leiden": 5333.0,
-    "Naarden": 5909.0,
-    "Nieuwegein": 4265.0,
-    "Purmerend": 4228.0,
-    "Rijpwetering": 4629.0,
-    "Rotterdam": 4504.0,
-    "Schiedam": 3729.0,
-    "Utrecht": 5907.0,
-    "Vlaardingen": 3740.0,
-    "Zaandam": 4438.0,
-    "Zoetermeer": 4053.0
+    "Amsterdam": 8155,
+    "Utrecht": 5907,
+    "Haarlem": 5915,
+    "Leiden": 5333,
+    "Den Haag": 4592,
+    "Rotterdam": 4504,
+    "Delft": 4815,
+    "Amersfoort": 4863,
+    "Zaandam": 4438,
+    "Hilversum": 5051,
+    "Almere": 4158,
+    "Zoetermeer": 4053,
+    "Purmerend": 4228,
+    "Hoofddorp": 4963,
+    "Nieuwegein": 4265,
+    "IJsselstein": 4433,
+    "Schiedam": 3729,
+    "Vlaardingen": 3740,
+    "Bussum": 5394,
+    "Naarden": 5909,
+    "Huizen": 4925,
+    "Rijpwetering": 4629
   },
   "neighborhood_price_weight": 0.7,
   "room_area_m2": 30.0,
   "room_adjustment_per_room": 0.02,
-  "room_overcrowding_threshold": 1.0,
-  "room_overcrowding_penalty_per_room": 0.03,
-  "room_adjustment_cap": 6.0,
   "max_adjustment": 0.25,
   "min_adjustment": -0.2,
   "energy_label_adjustments": {
@@ -54,17 +51,17 @@
     "Corner": 0.02,
     "Detached": 0.06,
     "Semi-detached": 0.03,
-    "Terraced": 0.0
+    "Terraced": 0
   },
   "garden_adjustments_apartment": {
-    "10-25": 0.1,
-    "25-50": 0.18,
-    "50+": 0.25
+      "10-25": 0.10,
+      "25-50": 0.18,
+      "50+": 0.25
   },
   "garden_adjustments_house": {
-    "10-25": 0.01,
-    "25-50": 0.025,
-    "50+": 0.04
+      "10-25": 0.01,
+      "25-50": 0.025,
+      "50+": 0.04
   },
   "position_adjustments": {
     "Busy road": -0.05,
@@ -89,14 +86,14 @@
     "3+": 0.035
   },
   "condition_adjustments": {
-    "Slecht": -0.1,
+    "Slecht": -0.10,
     "Matig": -0.05,
     "Redelijk": 0.0,
     "Goed": 0.06,
     "Uitstekend": 0.12
   },
   "micro_segment_base_uplift": {
-    "Geen extra vraag": 0.0,
+    "Geen extra vraag": 0.00,
     "Licht extra vraag": 0.02,
     "Duidelijk extra vraag": 0.04,
     "Zeer hoge extra vraag": 0.06
@@ -104,27 +101,21 @@
   "micro_location_disable_lot_size_adjustment": [],
   "micro_location_disable_position_adjustment": [],
   "micro_location_house_type_neutralize": {
-    "Geen extra vraag": [],
-    "Licht extra vraag": [],
-    "Duidelijk extra vraag": [
-      "Terraced"
-    ],
-    "Zeer hoge extra vraag": [
-      "Terraced"
-    ]
+      "Duidelijk extra vraag": ["Terraced"],
+      "Zeer hoge extra vraag": ["Terraced"]
   },
-  "condition_step1_budget_per_m2": 200.0,
-  "condition_step2_budget_per_m2": 400.0,
-  "condition_step3_budget_per_m2": 700.0,
-  "condition_step4_budget_per_m2": 1200.0,
+  "condition_step1_budget_per_m2": 200,
+  "condition_step2_budget_per_m2": 400,
+  "condition_step3_budget_per_m2": 700,
+  "condition_step4_budget_per_m2": 1200,
   "lot_size_ratio_median": 1.8220338983050848,
   "lot_size_ratio_weight": 0.15,
   "lot_size_ratio_clamp": 0.06,
   "build_year_buckets": [],
-  "area_full_price_m2": 90.0,
+  "area_full_price_m2": 90,
   "area_extra_weight": 0.85,
-  "small_home_reference_m2": 90.0,
-  "small_home_uplift_at_50m2": 0.1,
+  "small_home_reference_m2": 90,
+  "small_home_uplift_at_50m2": 0.10,
   "small_home_uplift_cap": 0.06,
   "renovation_roi": 0.5,
   "renovation_cap": 0.3,

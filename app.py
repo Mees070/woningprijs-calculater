@@ -257,10 +257,10 @@ position_display = {
 }
 condition_options = ["Slecht", "Matig", "Redelijk", "Goed", "Uitstekend"]
 micro_location_options = [
-    "Geen extra vraag (0%)",
-    "Licht extra vraag (+2%)",
-    "Duidelijk extra vraag (+4%)",
-    "Zeer hoge extra vraag (+6%)",
+    "Geen extra vraag",
+    "Licht extra vraag",
+    "Duidelijk extra vraag",
+    "Zeer hoge extra vraag",
 ]
 bathroom_options = ["0", "1", "2", "3+"]
 toilet_count_options = ["1", "2", "3+"]
@@ -319,14 +319,14 @@ with col2:
         step=50.0,
         format="%.0f",
         help=(
-            "Breed buurtgemiddelde; micro-locatie corrigeer je apart. "
+            "Breed buurtgemiddelde; extra vraag corrigeer je apart. "
             "Gebruik geen ‘perfecte match’-prijs om dubbel tellen te voorkomen."
         ),
     )
     micro_location = st.selectbox(
         "Extra vraag (straat/segment)",
         options=micro_location_options,
-        index=micro_location_options.index("Zeer hoge extra vraag (+6%)"),
+        index=micro_location_options.index("Geen extra vraag"),
         help=(
             "Alleen voor extra vraag die niet al door tuin/ligging/type/onderhoud wordt "
             "verklaard. Twijfel? Kies 0%."
@@ -342,6 +342,7 @@ with col2:
     )
     base_value_hint = max(0.0, living_area) * base_price_m2_hint
     micro_adj = profile.micro_segment_base_uplift.get(micro_location, 0.0)
+    st.caption(f"Huidige opslag: {format_nl_number(micro_adj*100, 1)}%")
     st.caption(format_adjustment_impact(micro_adj, base_value_hint))
     base_value_hint_effective = base_value_hint * (1.0 + micro_adj)
     energy_label = st.selectbox(
@@ -475,12 +476,14 @@ with col3:
         "Energielabel vóór",
         options=energy_label_options,
         index=energy_label_options.index(energy_label) if energy_label in energy_label_options else 0,
+        help="Huidig energielabel vóór renovatie.",
     )
 with col4:
     energy_after = st.selectbox(
         "Energielabel ná",
         options=energy_label_options,
         index=energy_label_options.index("C"),
+        help="Gewenst label ná renovatie (alleen effect als het verbetert).",
     )
     condition_after = None
     years_forward = st.number_input(
