@@ -267,7 +267,8 @@ toilet_count_options = ["1", "2", "3+"]
 city_options = sorted(profile.city_base_price_m2.keys())
 city_default = "Den Haag"
 city_select_options = (city_options if city_options else []) + ["Other..."]
-col1, col2 = st.columns(2)
+st.subheader("Locatie & basis")
+col1, col2, col3 = st.columns(3)
 with col1:
     living_area = st.number_input(
         "Woonoppervlak (m²)",
@@ -298,6 +299,7 @@ with col1:
         step=1,
         help="Bouwjaar; bepaalt ouderdomscorrectie.",
     )
+with col2:
     city_choice = st.selectbox(
         "Stad",
         options=city_select_options,
@@ -310,7 +312,6 @@ with col1:
         city = st.text_input("Andere stad", value=city_default)
     else:
         city = city_choice
-with col2:
     neighborhood_price_m2 = st.number_input(
         "Buurtprijs per m² (optioneel)",
         min_value=0.0,
@@ -323,10 +324,11 @@ with col2:
             "Gebruik geen ‘perfecte match’-prijs om dubbel tellen te voorkomen."
         ),
     )
+with col3:
     micro_location = st.selectbox(
         "Extra vraag (straat/segment)",
         options=micro_location_options,
-        index=micro_location_options.index("Geen extra vraag"),
+        index=micro_location_options.index("Zeer hoge extra vraag"),
         help=(
             "Alleen voor extra vraag die niet al door tuin/ligging/type/onderhoud wordt "
             "verklaard. Twijfel? Kies 0%."
@@ -345,6 +347,9 @@ with col2:
     st.caption(f"Huidige opslag: {format_nl_number(micro_adj*100, 1)}%")
     st.caption(format_adjustment_impact(micro_adj, base_value_hint))
     base_value_hint_effective = base_value_hint * (1.0 + micro_adj)
+st.subheader("Woningkenmerken")
+col4, col5 = st.columns(2)
+with col4:
     energy_label = st.selectbox(
         "Energielabel",
         options=energy_label_options,
@@ -363,6 +368,7 @@ with col2:
     )
     build_adj = profile.build_type_adjustments.get(build_type, 0.0)
     st.caption(format_adjustment_impact(build_adj, base_value_hint_effective))
+with col5:
     house_type_label = st.selectbox(
         "Woningtype",
         options=list(house_type_display.keys()),
