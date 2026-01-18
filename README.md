@@ -10,6 +10,8 @@ door te rekenen. De logica is transparant en instelbaar via
 - Renovatie-effect met ROI en energielabelverbetering
 - Markttrends via jaarlijkse groei en referentiejaar
 - Kalibratie op basis van je eigen dataset
+- Micro‑locatie en onderhoudsstaat als expliciete correcties
+- Afnemende meerwaarde van extra m²
 
 ## Snel starten (lokaal)
 
@@ -78,3 +80,10 @@ Voor consistente suggesties staat er een korte richtlijn in
 - **Aanpassing**: procentuele correctie op basis van kenmerken.
 - **Jaarlijkse groei**: verwachte marktgroei per jaar (bijv. 0,035 = 3,5%).
 - **Bandbreedte**: geschatte waarde ± onzekerheidsmarge.
+
+## Gebruikstips (kort)
+
+- **Buurtprijs per m²**: gebruik een breed buurtgemiddelde; geen “perfecte match”-prijs.
+- **Micro‑locatie**: alleen voor het extra straatje‑effect (bovenop tuin/ligging/type).
+- **Onderhoudsstaat**: kies de huidige staat; renovatie kan de staat automatisch verbeteren.
+- **Renovatiebudget**: als de staat verbetert, telt budget niet dubbel mee.

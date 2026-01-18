@@ -18,12 +18,25 @@ class PriceEstimator:
     def base_price_m2(self, features: dict) -> float:
         neighborhood_price = coerce_number(features.get("neighborhood_price_m2"))
         city = str(features.get("city", "")).strip()
+        micro_location = str(features.get("micro_location", "")).strip()
         city_price = self.profile.city_base_price_m2.get(city)
         base = city_price if city_price else self.profile.base_price_m2
         if neighborhood_price and not np.isnan(neighborhood_price):
             weight = self.profile.neighborhood_price_weight
             base = (weight * neighborhood_price) + ((1 - weight) * base)
+        micro_uplift = self.profile.micro_segment_base_uplift.get(micro_location, 0.0)
+        base = base * (1.0 + micro_uplift)
         return float(base)
+
+    def small_home_uplift(self, living_area: float) -> float:
+        reference = self.profile.small_home_reference_m2
+        if reference <= 50:
+            return 0.0
+        if living_area >= reference:
+            return 0.0
+        ratio = (reference - living_area) / (reference - 50.0)
+        uplift = ratio * self.profile.small_home_uplift_at_50m2
+        return float(min(self.profile.small_home_uplift_cap, max(0.0, uplift)))
 
     def room_adjustment(self, features: dict) -> float:
         living_area = coerce_number(features.get("living_area"))
@@ -33,12 +46,35 @@ class PriceEstimator:
         expected_rooms = max(1.0, living_area / self.profile.room_area_m2)
         diff = rooms - expected_rooms
         adjustment = diff * self.profile.room_adjustment_per_room
-        return float(max(-0.06, min(0.06, adjustment)))
+        overcrowding_threshold = max(0.0, self.profile.room_overcrowding_threshold)
+        if diff > overcrowding_threshold:
+            overcrowding_excess = diff - overcrowding_threshold
+            adjustment -= overcrowding_excess * self.profile.room_overcrowding_penalty_per_room
+        cap = abs(self.profile.room_adjustment_cap)
+        return float(max(-cap, min(cap, adjustment)))
 
     def category_adjustment(self, value: Optional[str], mapping: Dict[str, float]) -> float:
         if not value:
             return 0.0
         key = str(value).strip()
+        return float(mapping.get(key, 0.0))
+
+    def garden_adjustment(self, features: dict) -> float:
+        garden_area = coerce_number(features.get("garden_area"))
+        if np.isnan(garden_area) or garden_area < 10:
+            return 0.0
+        house_type = str(features.get("house_type", "")).strip()
+        mapping = (
+            self.profile.garden_adjustments_apartment
+            if house_type == "Apartment"
+            else self.profile.garden_adjustments_house
+        )
+        if garden_area < 25:
+            key = "10-25"
+        elif garden_area < 50:
+            key = "25-50"
+        else:
+            key = "50+"
         return float(mapping.get(key, 0.0))
 
     def estimate(self, features: dict, years_forward: int = 0) -> dict:
@@ -54,6 +90,7 @@ class PriceEstimator:
         else:
             effective_area = full_area + (living_area - full_area) * extra_weight
         base_value = effective_area * base_price_m2
+        micro_location = str(features.get("micro_location", "")).strip()
 
         adjustments = {
             "energy_label": self.category_adjustment(
@@ -63,23 +100,14 @@ class PriceEstimator:
             "build_type": self.category_adjustment(
                 features.get("build_type"), self.profile.build_type_adjustments
             ),
-            "house_type": self.category_adjustment(
-                features.get("house_type"), self.profile.house_type_adjustments
+            "house_type": 0.0,
+            "garden": self.garden_adjustment(features),
+            "position": 0.0,
+            "bathrooms": self.category_adjustment(
+                features.get("bathrooms"), self.profile.bathroom_adjustments
             ),
-            "garden": self.category_adjustment(
-                features.get("garden"), self.profile.garden_adjustments
-            ),
-            "roof": self.category_adjustment(
-                features.get("roof"), self.profile.roof_adjustments
-            ),
-            "position": self.category_adjustment(
-                features.get("position"), self.profile.position_adjustments
-            ),
-            "toilet": self.category_adjustment(
-                features.get("toilet"), self.profile.toilet_adjustments
-            ),
-            "floors": self.category_adjustment(
-                features.get("floors"), self.profile.floors_adjustments
+            "toilets": self.category_adjustment(
+                features.get("toilets"), self.profile.toilet_count_adjustments
             ),
             "condition": self.category_adjustment(
                 features.get("condition"), self.profile.condition_adjustments
@@ -87,7 +115,20 @@ class PriceEstimator:
             "build_year": self.build_year_adjustment(features),
             "rooms": self.room_adjustment(features),
             "lot_size": self.lot_size_adjustment(features),
+            "small_home": self.small_home_uplift(living_area),
         }
+        house_type = features.get("house_type")
+        neutralize_house_types = self.profile.micro_location_house_type_neutralize.get(
+            micro_location, []
+        )
+        if house_type not in neutralize_house_types:
+            adjustments["house_type"] = self.category_adjustment(
+                house_type, self.profile.house_type_adjustments
+            )
+        if micro_location not in self.profile.micro_location_disable_position_adjustment:
+            adjustments["position"] = self.category_adjustment(
+                features.get("position"), self.profile.position_adjustments
+            )
 
         total_adjustment = sum(adjustments.values())
         total_adjustment = max(self.profile.min_adjustment, min(self.profile.max_adjustment, total_adjustment))
@@ -106,6 +147,9 @@ class PriceEstimator:
         }
 
     def lot_size_adjustment(self, features: dict) -> float:
+        micro_location = str(features.get("micro_location", "")).strip()
+        if micro_location in self.profile.micro_location_disable_lot_size_adjustment:
+            return 0.0
         lot_size = coerce_number(features.get("lot_size"))
         living_area = coerce_number(features.get("living_area"))
         if np.isnan(lot_size) or np.isnan(living_area) or living_area <= 0:

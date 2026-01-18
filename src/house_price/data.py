@@ -9,7 +9,6 @@ from .utils import (
     normalize_garden,
     normalize_house_type,
     normalize_position,
-    normalize_roof,
     normalize_toilet,
     parse_rooms,
 )
@@ -30,13 +29,11 @@ class DatasetCleaner:
         df["build_type"] = df["Build type"].astype(str).str.strip()
         df["house_type"] = df["House type"].astype(str).str.strip()
         df["garden"] = df["Garden"].astype(str).str.strip()
-        df["roof"] = df["Roof"].astype(str).str.strip()
         df["position"] = df["Position"].astype(str).str.strip()
         df["toilet"] = df["Toilet"].astype(str).str.strip()
         df["floors"] = df["Floors"].astype(str).str.strip()
         df["house_type_norm"] = df["house_type"].apply(normalize_house_type)
         df["garden_norm"] = df["garden"].apply(normalize_garden)
-        df["roof_norm"] = df["roof"].apply(normalize_roof)
         df["position_norm"] = df["position"].apply(normalize_position)
         df["toilet_norm"] = df["toilet"].apply(normalize_toilet)
         df["floors_norm"] = df["floors"].apply(normalize_floors)

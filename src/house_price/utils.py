@@ -76,26 +76,6 @@ def normalize_garden(value: str) -> str:
     return "Other/Unknown"
 
 
-def normalize_roof(value: str) -> str:
-    text = str(value).lower()
-    if "plat dak" in text:
-        return "Flat"
-    if "zadeldak" in text:
-        return "Gable"
-    if "schilddak" in text:
-        return "Hip"
-    if "mansarde" in text:
-        return "Mansard"
-    if "lessenaardak" in text:
-        return "Shed"
-    if "tentdak" in text:
-        return "Tent"
-    if "samengesteld" in text:
-        return "Composite"
-    if "riet" in text:
-        return "Thatched"
-    return "Other/Unknown"
-
 
 def normalize_position(value: str) -> str:
     text = str(value).lower()

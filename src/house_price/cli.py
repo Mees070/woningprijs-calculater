@@ -27,9 +27,6 @@ def calibrate_profile(data_path: Path, output_path: Path, min_count: int) -> Non
     profile.garden_adjustments = calibrator.category_adjustments(
         "garden_norm", min_count=min_count, clamp=0.08
     )
-    profile.roof_adjustments = calibrator.category_adjustments(
-        "roof_norm", min_count=min_count, clamp=0.08
-    )
     profile.position_adjustments = calibrator.category_adjustments(
         "position_norm", min_count=min_count, clamp=0.08
     )
